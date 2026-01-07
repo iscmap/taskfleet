@@ -1,0 +1,41 @@
+# IDE Settings (IntelliJ, Eclipse, etc.)
+.idea/
+*.iml
+*.ipr
+*.iws
+.eclipse/
+.classpath
+.project
+.settings/
+.vscode/
+
+# Build Artifacts
+target/
+out/
+build/
+bin/
+
+# Maven
+.m2/
+dependency-reduced-pom.xml
+
+# Gradle
+.gradle/
+.gradletasknamecache
+
+# System Files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs and temporary files
+logs/
+*.log
+*.txt
+*.swp
+*~
+.#*
+
+# Environment/Config files (if not meant for version control)
+.env
+application.properties.example
