@@ -1,0 +1,9 @@
+rootProject.name = "taskfleet"
+
+include(
+        "services:order-service",
+        "services:customer-service",
+        "services:import-service",
+        "libs:common",
+        "libs:contracts"
+)
