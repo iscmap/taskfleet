@@ -58,3 +58,7 @@ gradle-app.setting
 !gradle-wrapper.jar
 # Avoid ignoring Gradle wrapper properties
 !gradle-wrapper.properties
+
+
+gradlew
+gradlew.bat
