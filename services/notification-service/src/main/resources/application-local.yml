@@ -6,9 +6,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-    properties:
-      hibernate:
-        format_sql: true
   flyway:
     enabled: true
 
@@ -19,7 +16,7 @@ aws:
   sqs:
     orderEventsQueue: taskfleet-order-events
 
-outbox:
-  publish:
-    batchSize: 10
-    fixedDelayMs: 1000
+consumer:
+  pollDelayMs: 1000
+  maxMessages: 5
+  waitTimeSeconds: 10

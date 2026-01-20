@@ -4,6 +4,7 @@ include(
         "services:order-service",
         "services:customer-service",
         "services:import-service",
+        "services:notification-service",
         "libs:common",
         "libs:contracts"
 )

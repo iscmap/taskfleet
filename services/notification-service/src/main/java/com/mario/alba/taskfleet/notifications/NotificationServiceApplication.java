@@ -1,4 +1,4 @@
-package com.mario.alba.taskfleet.orders;
+package com.mario.alba.taskfleet.notifications;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,8 +6,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class OrderServiceApplication {
+public class NotificationServiceApplication {
     public static void main(String[] args) {
-        SpringApplication.run(OrderServiceApplication.class, args);
+        SpringApplication.run(NotificationServiceApplication.class, args);
     }
 }

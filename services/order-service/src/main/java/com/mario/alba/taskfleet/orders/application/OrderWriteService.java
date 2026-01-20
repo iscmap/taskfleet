@@ -12,6 +12,13 @@ import java.time.Instant;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mario.alba.taskfleet.contracts.OutboxEventMessage;
+import com.mario.alba.taskfleet.orders.infra.jpa.OutboxEventEntity;
+import com.mario.alba.taskfleet.orders.infra.repo.OutboxRepository;
+import java.time.Instant;
+import java.util.Map;
+
 
 @Service
 public class OrderWriteService {
@@ -19,15 +26,20 @@ public class OrderWriteService {
     private final OrderRepository orders;
     private final IdempotencyRepository idemRepo;
     private final RequestHasher hasher;
+    private final OutboxRepository outbox;
+    private final ObjectMapper mapper;
 
     public OrderWriteService(
             OrderRepository orders,
             IdempotencyRepository idemRepo,
+            OutboxRepository outbox,
             com.fasterxml.jackson.databind.ObjectMapper mapper
     ) {
         this.orders = orders;
         this.idemRepo = idemRepo;
+        this.outbox = outbox;
         this.hasher = new RequestHasher(mapper);
+        this.mapper = mapper;
     }
 
     @Transactional
@@ -76,6 +88,34 @@ public class OrderWriteService {
         idem.setOrderId(orderId);
         idem.setCreatedAt(Instant.now());
         idemRepo.save(idem);
+
+        var eventId = UUID.randomUUID();
+        var envelope = new OutboxEventMessage(
+                eventId,
+                "OrderCreated",
+                Instant.now(),
+                null, // later we’ll propagate correlation id
+                Map.of(
+                        "orderId", orderId.toString(),
+                        "customerEmail", req.customerEmail()
+                )
+        );
+
+        String eventJson;
+        try {
+            eventJson = mapper.writeValueAsString(envelope);
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to serialize outbox event", e);
+        }
+
+        OutboxEventEntity ob = new OutboxEventEntity();
+        ob.setId(eventId);
+        ob.setEventType("OrderCreated");
+        ob.setPayloadJson(eventJson);
+        ob.setCorrelationId(null);
+        ob.setOccurredAt(Instant.now());
+        ob.setPublishedAt(null);
+        outbox.save(ob);
 
         return new CreateOrderResponse(orderId, OrderStatus.CREATED);
     }
