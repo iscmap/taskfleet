@@ -16,15 +16,9 @@ dependencies {
     runtimeOnly "org.postgresql:postgresql"
     implementation "org.flywaydb:flyway-core:10.21.0"
     implementation 'org.flywaydb:flyway-database-postgresql'
+
     implementation platform("software.amazon.awssdk:bom:2.25.60")
     implementation "software.amazon.awssdk:sqs"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
-
-    testImplementation "org.testcontainers:junit-jupiter:1.20.4"
-    testImplementation "org.testcontainers:postgresql:1.20.4"
-}
-
-tasks.named("bootJar") {
-    enabled = true
 }
